@@ -8,7 +8,7 @@ using `pip` with `pip3 install -r requirements-3.txt`
 # Scripts
 The subheadings link to the script contents on GitHub.
 
-## [cleanComputer.py](https://github.com/alexrpreston/Python-Scripts/blob/master/python3/cleanComputer.py).
+## [python3/cleanComputer.py](https://github.com/alexrpreston/Python-Scripts/blob/master/python3/cleanComputer.py).
 + Authors: Alex Preston
 + Created: 2-10-2020
 
