@@ -1,0 +1,3 @@
+[submodule "python3/kindleHightFormatter/evernote"]
+	path = python3/kindleHightFormatter/evernote
+	url = git://github.com/evernote/evernote-sdk-python/
