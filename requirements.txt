@@ -1,2 +1,6 @@
-###### Requirements without Version Specifiers ######
-send2trash
+beautifulsoup4==4.11.1
+GitPython==3.1.27
+Markdown==3.4.1
+pyperclip==1.8.2
+requests==2.28.1
+send2trash==1.8.0
