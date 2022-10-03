@@ -34,7 +34,7 @@ def sendText():
     while len(text) < 160:
         if len(quotes) > 0:
             q = quotes[random.randrange(0, len(quotes))]
-            text += "➖" + q.text
+            text += "➖" + q.text + "\n"
         else:
             exit()
 
