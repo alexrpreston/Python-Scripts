@@ -36,6 +36,7 @@ def sendText():
             q = quotes[random.randrange(0, len(quotes))]
             text += "➖" + q.text + "\n"
         else:
+            print("exiting")
             exit()
 
     phoneNum = os.environ.get('phoneNumber')
