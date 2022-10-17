@@ -14,7 +14,4 @@ kindleHighlights = re.sub(" :", ":", kindleHighlights)
 kindleHighlights = re.sub(" ;", ";", kindleHighlights)
 kindleHighlights = re.sub(" - ", "-", kindleHighlights)
 
-print(kindleHighlights)
-
-#Remove Highlight (yellow) - Page 12 · Location 29 and replace with nothing
-#Turn all ' .' into '.' 
+pyperclip.copy(kindleHighlights)

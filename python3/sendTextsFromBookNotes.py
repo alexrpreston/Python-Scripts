@@ -38,13 +38,15 @@ def sendText():
         else:
             exit()
 
+    phoneNum = os.environ.get('phoneNumber')
+    textBeltAPIKey = os.environ.get('textBeltAPIKey')
     payload = {
-            'phone': '3217492467', 
+            'phone': phoneNum, 
             'message': text, 
-            'key':'4478955e074ccfba8225c1b10ccc3d4fb13eb1832SFOC2LRLmalDac3bSF6yCmzv'
+            'key':textBeltAPIKey
     }
     resp = requests.post('https://textbelt.com/text', payload)
-
+    print(resp)
     print("finished")
             
 def pullFromRepo():
