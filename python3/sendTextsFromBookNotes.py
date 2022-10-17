@@ -6,7 +6,7 @@ import markdown
 import bs4
 import re
 import requests
-import git
+# import git
 
 
 regex = re.compile(r'<[^>]+>')
@@ -14,44 +14,46 @@ def remove_html(string):
     return regex.sub('', string)
 
 def sendText():
-    bookNotes_dir = "/home/alex/Obsidian/Main/Resources/Book Notes"
+    # bookNotes_dir = "/home/alex/Obsidian/Main/Resources/Book Notes"
 
-    booksNotes = os.listdir(bookNotes_dir)
-    randomBookIndex = random.randrange(0,len(booksNotes))
-    randomBook = booksNotes[randomBookIndex]
+    # booksNotes = os.listdir(bookNotes_dir)
+    # randomBookIndex = random.randrange(0,len(booksNotes))
+    # randomBook = booksNotes[randomBookIndex]
 
-    with open(bookNotes_dir + "/" + randomBook, 'r') as f:
-        text = f.read()
-        bookText = markdown.markdown(text)
+    # with open(bookNotes_dir + "/" + randomBook, 'r') as f:
+    #     text = f.read()
+    #     bookText = markdown.markdown(text)
 
 
-    html = bs4.BeautifulSoup(bookText, "html.parser")
-    quotes = html.find_all("li")
+    # html = bs4.BeautifulSoup(bookText, "html.parser")
+    # quotes = html.find_all("li")
 
-    len(quotes)
+    # len(quotes)
 
-    text = randomBook[:len(randomBook)-2] + " \n"
-    while len(text) < 160:
-        if len(quotes) > 0:
-            q = quotes[random.randrange(0, len(quotes))]
-            text += "➖" + q.text + "\n"
-        else:
-            print("exiting")
-            exit()
+    # text = randomBook[:len(randomBook)-2] + " \n"
+    # while len(text) < 160:
+    #     if len(quotes) > 0:
+    #         q = quotes[random.randrange(0, len(quotes))]
+    #         text += "➖" + q.text + "\n"
+    #     else:
+    #         print("exiting")
+    #         exit()
 
-    phoneNum = os.environ.get('phoneNumber')
-    textBeltAPIKey = os.environ.get('textBeltAPIKey')
+    phoneNum = os.environ.get('PHONE_NUMBER')
+    print(phoneNum)
+    textBeltAPIKey = os.environ.get('TEXTBELT_API_KEY')
+    print(textBeltAPIKey)
     payload = {
             'phone': phoneNum, 
-            'message': text, 
+            'message': "idk", 
             'key':textBeltAPIKey
     }
     resp = requests.post('https://textbelt.com/text', payload)
-    print(resp)
+    print(resp.json())
     print("finished")
             
 def pullFromRepo():
-    my_repo = git.Repo('/home/alex/Obsidian')
-    my_repo.remotes.origin.pull()
+    # my_repo = git.Repo('/home/alex/Obsidian')
+    # my_repo.remotes.origin.pull()
     sendText()
 pullFromRepo()
