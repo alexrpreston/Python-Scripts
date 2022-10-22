@@ -8,6 +8,9 @@ import bs4
 import re
 import requests
 import git
+import os
+from twilio.rest import Client
+
 
 
 regex = re.compile(r'<[^>]+>')
@@ -41,18 +44,25 @@ def sendText():
             exit()
 
     phoneNum = os.environ.get('PHONE_NUMBER')
-    textBeltAPIKey = os.environ.get('TEXTBELT_API_KEY')
-    payload = {
-            'phone': phoneNum, 
-            'message': text, 
-            'key':textBeltAPIKey
-    }
-    resp = requests.post('https://textbelt.com/text', payload)
-    print(resp.json())
-    print("finished")
+    # Find your Account SID and Auth Token in Account Info
+    # and set the environment variables. See http://twil.io/secure
+    account_sid = os.environ['TWILIO_ACCOUNT_SID']
+    auth_token = os.environ['TWILIO_AUTH_TOKEN']
+    twilio_number = os.environ['TWILIO_NUMBER']
+    client = Client(account_sid, auth_token)
+
+    message = client.messages.create(
+            body=text,
+            from_=twilio_number,
+            to=phoneNum
+    )
+
+    print(message.sid)
+ 
             
 def pullFromRepo():
     my_repo = git.Repo('/home/alex/Obsidian')
     my_repo.remotes.origin.pull()
     sendText()
+    
 pullFromRepo()
