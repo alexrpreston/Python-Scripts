@@ -40,6 +40,7 @@ def sendText():
 
         text = randomBook[:len(randomBook)-2] + " \n"
         q = quotes[random.randrange(0, len(quotes))]
+        finalText += randomBook + "\n"
         finalText += "-" + q.text + "\n\n"
     print(finalText)
 
