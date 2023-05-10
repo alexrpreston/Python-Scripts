@@ -19,13 +19,14 @@ def remove_html(string):
 
 def sendText():
     bookNotes_dir = "/home/alex/jobs/Obsidian/Main/Resources/Book Notes"
-
-    booksNotes = os.listdir(bookNotes_dir)
-    randomBookIndex = random.randrange(0,len(booksNotes))
-    randomBook = booksNotes[randomBookIndex]
     finalText = ""
 
+    booksNotes = os.listdir(bookNotes_dir)
+    
+
     for i in range(0,5):
+        randomBookIndex = random.randrange(0,len(booksNotes))
+        randomBook = booksNotes[randomBookIndex]
         with open(bookNotes_dir + "/" + randomBook, 'r') as f:
             text = f.read()
             bookText = markdown.markdown(text)
@@ -37,10 +38,8 @@ def sendText():
         if len(quotes) == 0:
             continue
         
-
-        text = randomBook[:len(randomBook)-2] + " \n"
         q = quotes[random.randrange(0, len(quotes))]
-        finalText += randomBook + "\n"
+        finalText += randomBook[:len(randomBook)-2] + " \n"
         finalText += "-" + q.text + "\n\n"
     print(finalText)
 
