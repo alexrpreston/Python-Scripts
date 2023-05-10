@@ -34,7 +34,9 @@ def sendText():
         html = bs4.BeautifulSoup(bookText, "html.parser")
         quotes = html.find_all("li")
 
-        len(quotes)
+        if len(quotes) == 0:
+            continue
+        
 
         text = randomBook[:len(randomBook)-2] + " \n"
         q = quotes[random.randrange(0, len(quotes))]
