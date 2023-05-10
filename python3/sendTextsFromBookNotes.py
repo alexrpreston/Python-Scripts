@@ -23,41 +23,41 @@ def sendText():
 
     booksNotes = os.listdir(bookNotes_dir)
     
+    for j in range(0,2):
+        for i in range(0,2):
+            randomBookIndex = random.randrange(0,len(booksNotes))
+            randomBook = booksNotes[randomBookIndex]
+            with open(bookNotes_dir + "/" + randomBook, 'r') as f:
+                text = f.read()
+                bookText = markdown.markdown(text)
 
-    for i in range(0,5):
-        randomBookIndex = random.randrange(0,len(booksNotes))
-        randomBook = booksNotes[randomBookIndex]
-        with open(bookNotes_dir + "/" + randomBook, 'r') as f:
-            text = f.read()
-            bookText = markdown.markdown(text)
 
+            html = bs4.BeautifulSoup(bookText, "html.parser")
+            quotes = html.find_all("li")
 
-        html = bs4.BeautifulSoup(bookText, "html.parser")
-        quotes = html.find_all("li")
+            if len(quotes) == 0:
+                continue
+            
+            q = quotes[random.randrange(0, len(quotes))]
+            finalText += randomBook[:len(randomBook)-2] + " \n"
+            finalText += "-" + q.text.strip() + "\n\n"
+        print(finalText)
 
-        if len(quotes) == 0:
-            continue
-        
-        q = quotes[random.randrange(0, len(quotes))]
-        finalText += randomBook[:len(randomBook)-2] + " \n"
-        finalText += "-" + q.text.strip() + "\n\n"
-    print(finalText)
+        phoneNum = os.environ.get('PHONE_NUMBER')
+        # Find your Account SID and Auth Token in Account Info
+        # and set the environment variables. See http://twil.io/secure
+        account_sid = os.environ['TWILIO_ACCOUNT_SID']
+        auth_token = os.environ['TWILIO_AUTH_TOKEN']
+        twilio_number = os.environ['TWILIO_NUMBER']
+        client = Client(account_sid, auth_token)
 
-    phoneNum = os.environ.get('PHONE_NUMBER')
-    # Find your Account SID and Auth Token in Account Info
-    # and set the environment variables. See http://twil.io/secure
-    account_sid = os.environ['TWILIO_ACCOUNT_SID']
-    auth_token = os.environ['TWILIO_AUTH_TOKEN']
-    twilio_number = os.environ['TWILIO_NUMBER']
-    client = Client(account_sid, auth_token)
+        message = client.messages.create(
+                body=finalText,
+                from_=twilio_number,
+                to=phoneNum
+        )
 
-    message = client.messages.create(
-            body=finalText,
-            from_=twilio_number,
-            to=phoneNum
-    )
-
-    print(message.sid)
+        print(message.sid)
  
             
 def pullFromRepo():
