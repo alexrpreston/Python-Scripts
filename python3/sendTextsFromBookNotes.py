@@ -40,7 +40,7 @@ def sendText():
         
         q = quotes[random.randrange(0, len(quotes))]
         finalText += randomBook[:len(randomBook)-2] + " \n"
-        finalText += "-" + q.text + "\n\n"
+        finalText += "-" + q.text.strip() + "\n\n"
     print(finalText)
 
     phoneNum = os.environ.get('PHONE_NUMBER')
