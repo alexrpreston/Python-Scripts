@@ -18,30 +18,28 @@ def remove_html(string):
     return regex.sub('', string)
 
 def sendText():
-    bookNotes_dir = "/home/alex/Obsidian/Main/Resources/Book Notes"
+    bookNotes_dir = "/home/alex/jobs/Obsidian/Main/Resources/Book Notes"
 
     booksNotes = os.listdir(bookNotes_dir)
     randomBookIndex = random.randrange(0,len(booksNotes))
     randomBook = booksNotes[randomBookIndex]
+    finalText = ""
 
-    with open(bookNotes_dir + "/" + randomBook, 'r') as f:
-        text = f.read()
-        bookText = markdown.markdown(text)
+    for i in range(0,5):
+        with open(bookNotes_dir + "/" + randomBook, 'r') as f:
+            text = f.read()
+            bookText = markdown.markdown(text)
 
 
-    html = bs4.BeautifulSoup(bookText, "html.parser")
-    quotes = html.find_all("li")
+        html = bs4.BeautifulSoup(bookText, "html.parser")
+        quotes = html.find_all("li")
 
-    len(quotes)
+        len(quotes)
 
-    text = randomBook[:len(randomBook)-2] + " \n"
-    while len(text) < 160:
-        if len(quotes) > 0:
-            q = quotes[random.randrange(0, len(quotes))]
-            text += "-" + q.text + "\n"
-        else:
-            print("exiting")
-            exit()
+        text = randomBook[:len(randomBook)-2] + " \n"
+        q = quotes[random.randrange(0, len(quotes))]
+        finalText += "-" + q.text + "\n\n"
+    print(finalText)
 
     phoneNum = os.environ.get('PHONE_NUMBER')
     # Find your Account SID and Auth Token in Account Info
@@ -52,7 +50,7 @@ def sendText():
     client = Client(account_sid, auth_token)
 
     message = client.messages.create(
-            body=text,
+            body=finalText,
             from_=twilio_number,
             to=phoneNum
     )
@@ -61,7 +59,7 @@ def sendText():
  
             
 def pullFromRepo():
-    my_repo = git.Repo('/home/alex/Obsidian')
+    my_repo = git.Repo('/home/alex/jobs/Obsidian')
     my_repo.remotes.origin.pull()
     sendText()
     
