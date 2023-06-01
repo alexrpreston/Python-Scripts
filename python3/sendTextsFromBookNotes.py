@@ -25,8 +25,8 @@ def sendText():
 
     booksNotes = os.listdir(bookNotes_dir)
     
-    for j in range(0,2):
-        for i in range(0,2):
+    for j in range(0,3):
+        for i in range(0,3):
             randomBookIndex = random.randrange(0,len(booksNotes))
             randomBook = booksNotes[randomBookIndex]
             with open(bookNotes_dir + "/" + randomBook, 'r') as f:
