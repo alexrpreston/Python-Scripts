@@ -26,9 +26,11 @@ def sendText():
     booksNotes = os.listdir(bookNotes_dir)
     
     for j in range(0,3):
+        randomBookIndex = random.randrange(0,len(booksNotes))
+        randomBook = booksNotes[randomBookIndex]
+        
         for i in range(0,3):
-            randomBookIndex = random.randrange(0,len(booksNotes))
-            randomBook = booksNotes[randomBookIndex]
+            
             with open(bookNotes_dir + "/" + randomBook, 'r') as f:
                 text = f.read()
                 bookText = markdown.markdown(text)
