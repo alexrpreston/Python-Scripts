@@ -65,7 +65,7 @@ def pullFromRepo():
     g = git.Repo(repo_path)
     token = os.environ.get('GITHUB_TOKEN')
     url_with_token = f"https://{token}@github.com/alexrpreston/Obsidian.git"
-    g.remotes.origin.pull(url=url_with_token)
+    g.remotes.origin.pull(url_with_token)
     sendText()
     
 pullFromRepo()
