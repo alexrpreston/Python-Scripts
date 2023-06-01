@@ -41,7 +41,7 @@ def sendText():
                 continue
             
             q = quotes[random.randrange(0, len(quotes))]
-            finalText += "</b>" + randomBook[:len(randomBook)-2] + "</b>"
+            finalText += "<b>" + randomBook[:len(randomBook)-2] + "</b>"
             finalText += "<p>-" + q.text.strip() + "</p><br>"
         print(finalText)
 
