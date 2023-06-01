@@ -47,7 +47,7 @@ def sendText():
 
         message = Mail(
             from_email='alex@pageamplify.com',
-            to_emails='funnymoto33@gmail.com',
+            to_emails='alexrpreston@gmail.com',
             subject='Book Highlights',
             html_content=finalText)
         try:
