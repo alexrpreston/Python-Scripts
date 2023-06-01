@@ -9,7 +9,9 @@ import re
 import requests
 import git
 import os
-from twilio.rest import Client
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 
 
@@ -43,26 +45,26 @@ def sendText():
             finalText += "-" + q.text.strip() + "\n\n"
         print(finalText)
 
-        phoneNum = os.environ.get('PHONE_NUMBER')
-        # Find your Account SID and Auth Token in Account Info
-        # and set the environment variables. See http://twil.io/secure
-        account_sid = os.environ['TWILIO_ACCOUNT_SID']
-        auth_token = os.environ['TWILIO_AUTH_TOKEN']
-        twilio_number = os.environ['TWILIO_NUMBER']
-        client = Client(account_sid, auth_token)
-
-        message = client.messages.create(
-                body=finalText,
-                from_=twilio_number,
-                to=phoneNum
-        )
-
-        print(message.sid)
- 
+        message = Mail(
+            from_email='alex@pageamplify.com',
+            to_emails='alexrpreston@gmail.com',
+            subject='Book Highlights',
+            html_content=finalText)
+        try:
+            sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+            response = sg.send(message)
+            print(response.status_code)
+            print(response.body)
+            print(response.headers)
+        except Exception as e:
+            print(e.message)
+        
             
 def pullFromRepo():
-    my_repo = git.Repo('/home/alex/jobs/Obsidian')
-    my_repo.remotes.origin.pull()
+    repo_path = '/home/alex/jobs/Obsidian'
+    g = git.Repo(repo_path)
+    token = os.environ.get('GITHUB_TOKEN')
+    g.pull("https://token@github.com/alexrpreston/Obsidian.git")
     sendText()
     
 pullFromRepo()
