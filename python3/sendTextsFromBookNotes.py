@@ -42,7 +42,7 @@ def sendText():
             
             q = quotes[random.randrange(0, len(quotes))]
             finalText += randomBook[:len(randomBook)-2] + " \n"
-            finalText += "-" + q.text.strip() + "\n\n"
+            finalText += "<p>-" + q.text.strip() + "</p><br><br>"
         print(finalText)
 
         message = Mail(
