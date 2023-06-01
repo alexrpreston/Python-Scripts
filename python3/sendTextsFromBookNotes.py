@@ -41,13 +41,13 @@ def sendText():
                 continue
             
             q = quotes[random.randrange(0, len(quotes))]
-            finalText += randomBook[:len(randomBook)-2] + " \n"
-            finalText += "<p>-" + q.text.strip() + "</p><br><br>"
+            finalText += "</b>" + randomBook[:len(randomBook)-2] + "</b>"
+            finalText += "<p>-" + q.text.strip() + "</p><br>"
         print(finalText)
 
         message = Mail(
             from_email='alex@pageamplify.com',
-            to_emails='alexrpreston@gmail.com',
+            to_emails='funnymoto33@gmail.com',
             subject='Book Highlights',
             html_content=finalText)
         try:
