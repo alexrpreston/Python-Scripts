@@ -44,7 +44,7 @@ def sendText():
                 continue
             
             q = quotes[random.randrange(0, len(quotes))]
-            finalText += "<p>-" + q.text.strip() + "</p><br>"
+            finalText += "<p>-" + q.text.strip() + "</p>"
         print(finalText)
 
         message = Mail(
