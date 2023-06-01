@@ -28,7 +28,8 @@ def sendText():
     for j in range(0,3):
         randomBookIndex = random.randrange(0,len(booksNotes))
         randomBook = booksNotes[randomBookIndex]
-        
+        finalText += "<b>" + randomBook[:len(randomBook)-2] + "</b>"
+
         for i in range(0,3):
             
             with open(bookNotes_dir + "/" + randomBook, 'r') as f:
@@ -43,7 +44,6 @@ def sendText():
                 continue
             
             q = quotes[random.randrange(0, len(quotes))]
-            finalText += "<b>" + randomBook[:len(randomBook)-2] + "</b>"
             finalText += "<p>-" + q.text.strip() + "</p><br>"
         print(finalText)
 
