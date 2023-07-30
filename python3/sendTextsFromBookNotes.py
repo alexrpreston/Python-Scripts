@@ -1,75 +1,68 @@
-from email import message
-import os
-from datetime import date
-import math
-import random
-import markdown
-import bs4
-import re
 import requests
-import git
-import os
+from bs4 import BeautifulSoup
+import random
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
 
+def getRandomBooks(numOfBooks):
+    urlToBookNotes = "https://alexpreston.org/bookshelf/"
 
-regex = re.compile(r'<[^>]+>')
-def remove_html(string):
-    return regex.sub('', string)
+    response = requests.get(urlToBookNotes)
+    html_content = response.text
 
-def sendText():
-    bookNotes_dir = "/home/alex/jobs/Obsidian/Main/Resources/Book Notes"
-    finalText = ""
-
-    booksNotes = os.listdir(bookNotes_dir)
-    
-    for j in range(0,3):
-        randomBookIndex = random.randrange(0,len(booksNotes))
-        randomBook = booksNotes[randomBookIndex]
-        finalText += "<b>" + randomBook[:len(randomBook)-2] + "</b>"
-
-        for i in range(0,3):
-            
-            with open(bookNotes_dir + "/" + randomBook, 'r') as f:
-                text = f.read()
-                bookText = markdown.markdown(text)
+    soup = BeautifulSoup(html_content, 'html.parser')
+    a_tags = soup.find_all('a')
+    filtered_a_tags = [tag for tag in a_tags if tag.get('href') != "/"]
+    return random.sample(filtered_a_tags, numOfBooks)
 
 
-            html = bs4.BeautifulSoup(bookText, "html.parser")
-            quotes = html.find_all("li")
 
-            if len(quotes) == 0:
-                continue
-            
-            q = quotes[random.randrange(0, len(quotes))]
-            finalText += "<p>-" + q.text.strip() + "</p>"
-        print(finalText)
-
-        message = Mail(
-            from_email='alex@pageamplify.com',
-            to_emails='alexrpreston@gmail.com',
-            subject='Book Highlights',
-            html_content=finalText)
+def getRandomHighlights(randomBooks, numHighlightsPerBook):
+    highlights = {}
+    for book in randomBooks:
+        print(book.get('href'))
+        url = "https://alexpreston.org" + book.get('href')
+        response = requests.get(url)
+        html_content = response.text
+        soup = BeautifulSoup(html_content, 'html.parser')
+        li_tags = soup.find_all('li')
         try:
-            sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-            response = sg.send(message)
-            print(response.status_code)
-            print(response.body)
-            print(response.headers)
-        except Exception as e:
-            print(e.message)
-        
-            
-def pullFromRepo():
-    repo_path = '/home/alex/jobs/Obsidian'
-    repo = git.Repo(repo_path)
-    token = os.environ.get('GITHUB_TOKEN')
-    origin = repo.remotes.origin
-    origin_url = origin.config_reader.get("url")
-    url_with_token = origin_url.replace("https://", f"https://{token}@")
-    repo.git.pull(url_with_token)
-    sendText()
+            sampledHighlights = random.sample(li_tags, numHighlightsPerBook)
+            highlights[book.text] = [highlight.text.strip() for highlight in sampledHighlights]
+        except: 
+            print("Couldn't grab highlights for", book.text)
+    return highlights
+
+
+def sendHighlights(highlights):
+    textBody = ""
+    for book in highlights.keys():
+        textBody += "<p><u><b>" + book + "</b></u></p>"
+        for highlight in highlights[book]:
+            textBody += "<ul><li>" + highlight + "</li></ul>"
     
-pullFromRepo()
+    message = Mail(
+        from_email='alex@pageamplify.com',
+        to_emails='alexrpreston@gmail.com',
+        subject='Book Notes',
+        html_content=textBody
+    )
+    try:
+        key = os.environ.get('SENDGRID_API_KEY')
+        sg = SendGridAPIClient(key)
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(e)
+
+
+def getHighlights():
+    randomBooks = getRandomBooks(5)
+    randomHighLights = getRandomHighlights(randomBooks, 1)
+    sendHighlights(randomHighLights)
+
+getHighlights()
